@@ -1,6 +1,6 @@
 variable "location" {
   description = "The resource group location"
-  default     = "West Europe"
+  default     = "South Central US"
 }
 
 variable "vnet_resource_group_name" {
@@ -19,18 +19,18 @@ variable "kube_vnet_name" {
 }
 
 variable "kube_version_prefix" {
-  description = "AKS Kubernetes version prefix. Formatted '[Major].[Minor]' like '1.18'. Patch version part (as in '[Major].[Minor].[Patch]') will be set to latest automatically."
-  default     = "1.18"
+  description = "AKS Kubernetes version prefix. Formatted '[Major].[Minor]' like '1.21'. Patch version part (as in '[Major].[Minor].[Patch]') will be set to latest automatically."
+  default     = "1.21"
 }
 
 variable "kube_resource_group_name" {
   description = "The resource group name to be created"
-  default     = "nopublicipaks"
+  default     = "aks-fw-rg"
 }
 
 variable "nodepool_nodes_count" {
   description = "Default nodepool nodes count"
-  default     = 1
+  default     = 2
 }
 
 variable "nodepool_vm_size" {
@@ -50,5 +50,5 @@ variable "network_dns_service_ip" {
 
 variable "network_service_cidr" {
   description = "CNI service cidr"
-  default     = "10.2.0.0/24"
+  default     = "10.2.0.0/16"
 }
