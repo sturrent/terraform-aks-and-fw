@@ -85,13 +85,13 @@ data "azurerm_kubernetes_service_versions" "current" {
   version_prefix = var.kube_version_prefix
 }
 
-resource "azurerm_kubernetes_cluster" "privateaks" {
-  name                    = "private-aks"
+resource "azurerm_kubernetes_cluster" "aks-fw" {
+  name                    = "aks-fw"
   location                = var.location
   kubernetes_version      = data.azurerm_kubernetes_service_versions.current.latest_version
   resource_group_name     = azurerm_resource_group.kube.name
-  dns_prefix              = "private-aks"
-  private_cluster_enabled = true
+  dns_prefix              = "aks-fw"
+  private_cluster_enabled = false
 
   default_node_pool {
     name           = "default"
@@ -118,15 +118,5 @@ resource "azurerm_kubernetes_cluster" "privateaks" {
 resource "azurerm_role_assignment" "netcontributor" {
   role_definition_name = "Network Contributor"
   scope                = module.kube_network.subnet_ids["aks-subnet"]
-  principal_id         = azurerm_kubernetes_cluster.privateaks.identity[0].principal_id
-}
-
-module "jumpbox" {
-  source                  = "./modules/jumpbox"
-  location                = var.location
-  resource_group          = azurerm_resource_group.vnet.name
-  vnet_id                 = module.hub_network.vnet_id
-  subnet_id               = module.hub_network.subnet_ids["jumpbox-subnet"]
-  dns_zone_name           = join(".", slice(split(".", azurerm_kubernetes_cluster.privateaks.private_fqdn), 1, length(split(".", azurerm_kubernetes_cluster.privateaks.private_fqdn))))
-  dns_zone_resource_group = azurerm_kubernetes_cluster.privateaks.node_resource_group
+  principal_id         = azurerm_kubernetes_cluster.aks-fw.identity[0].principal_id
 }
