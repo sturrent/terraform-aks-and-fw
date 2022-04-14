@@ -78,6 +78,7 @@ module "routetable" {
   r_name             = "kubenetfw_fw_r"
   firewal_private_ip = module.firewall.fw_private_ip
   subnet_id          = module.kube_network.subnet_ids["aks-subnet"]
+  depends_on = [module.firewall]
 }
 
 data "azurerm_kubernetes_service_versions" "current" {
