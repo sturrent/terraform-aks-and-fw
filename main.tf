@@ -93,6 +93,7 @@ resource "azurerm_kubernetes_cluster" "aks-fw" {
   resource_group_name     = azurerm_resource_group.kube.name
   dns_prefix              = "aks-fw"
   private_cluster_enabled = false
+  public_network_access_enabled = false
 
   default_node_pool {
     name           = "default"
