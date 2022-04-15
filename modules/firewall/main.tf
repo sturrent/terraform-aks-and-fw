@@ -88,6 +88,7 @@ resource "azurerm_firewall_application_rule_collection" "aksbasics" {
     source_addresses = ["*"]
 
     target_fqdns = [
+      "*.azmk8s.io",
       "*.cdn.mscr.io",
       "mcr.microsoft.com",
       "*.data.mcr.microsoft.com",
