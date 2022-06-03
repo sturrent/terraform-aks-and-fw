@@ -126,6 +126,7 @@ resource "azurerm_firewall_application_rule_collection" "osupdates" {
     source_addresses = ["*"]
 
     target_fqdns = [
+      "azure.archive.ubuntu.com",
       "download.opensuse.org",
       "security.ubuntu.com",
       "ntp.ubuntu.com",

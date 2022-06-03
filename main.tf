@@ -1,9 +1,14 @@
 terraform {
   required_version = ">= 0.13"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.0"
+    }
+  }  
 }
 
-provider "azurerm" {
-  version = "~>3.0" 
+provider "azurerm" { 
   features {}
 }
 
@@ -109,7 +114,7 @@ resource "azurerm_kubernetes_cluster" "aks-fw" {
     docker_bridge_cidr = var.network_docker_bridge_cidr
     dns_service_ip     = var.network_dns_service_ip
     network_plugin     = "azure"
-    outbound_type      = "userDefinedRouting"
+    outbound_type      = "loadBalancer"
     service_cidr       = var.network_service_cidr
   }
 
