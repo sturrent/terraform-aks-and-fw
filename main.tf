@@ -126,3 +126,56 @@ resource "azurerm_role_assignment" "netcontributor" {
   scope                = module.kube_network.subnet_ids["aks-subnet"]
   principal_id         = azurerm_kubernetes_cluster.aks-fw.identity[0].principal_id
 }
+
+provider "kubernetes" {
+  alias = "admin"
+  host                   = azurerm_kubernetes_cluster.aks-fw.kube_config.0.host
+  username               = azurerm_kubernetes_cluster.aks-fw.kube_config.0.username
+  password               = azurerm_kubernetes_cluster.aks-fw.kube_config.0.password
+  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks-fw.kube_config.0.client_certificate)
+  client_key             = base64decode(azurerm_kubernetes_cluster.aks-fw.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks-fw.kube_config.0.cluster_ca_certificate)
+}
+
+resource "kubernetes_deployment" "api-monitor" {
+  provider = kubernetes.admin
+  depends_on = [resource.azurerm_kubernetes_cluster.aks-fw]
+  metadata {
+    name = "api-monitor"
+    labels = {
+      app = "api-monitor"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "api-monitor"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "api-monitor"
+        }
+      }
+      spec {
+        container {
+          image = "sturrent/api-monitor:latest"
+          name  = "api-monitor"
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
