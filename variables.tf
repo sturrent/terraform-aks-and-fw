@@ -5,7 +5,7 @@ variable "location" {
 
 variable "vnet_resource_group_name" {
   description = "The resource group name to be created"
-  default     = "networks"
+  default     = "networks-aks-fw"
 }
 
 variable "hub_vnet_name" {
