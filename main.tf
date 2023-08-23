@@ -111,7 +111,6 @@ resource "azurerm_kubernetes_cluster" "aks-fw" {
   }
 
   network_profile {
-    docker_bridge_cidr = var.network_docker_bridge_cidr
     dns_service_ip     = var.network_dns_service_ip
     network_plugin     = "azure"
     outbound_type      = "loadBalancer"
